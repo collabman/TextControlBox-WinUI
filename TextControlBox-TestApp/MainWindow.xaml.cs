@@ -1,5 +1,6 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -22,16 +23,22 @@ namespace TextControlBox_TestApp
             textbox.UseSpacesInsteadTabs = false;
             textbox.ShowWhitespaceCharacters = true;
 
-            SetWindowTheme(this, ElementTheme.Dark);
+            SetWindowTheme(this, ElementTheme.Default);
 
             textbox.LinkClicked += Textbox_LinkClicked;
             textbox.DispatcherQueue.TryEnqueue(() =>
             {
-                textbox.RequestedTheme = ElementTheme.Dark;
+                textbox.RequestedTheme = ElementTheme.Default;
             });
+            foreach(var Language in Enum.GetValues<SyntaxHighlightID>().Cast<SyntaxHighlightID>().OrderBy(x => x.ToString()))
+            {
+                LanguageComboBox.Items.Add(new ComboBoxItem { Content = Language.ToString() });
+            }
+            //ThemeComboBox.ItemsSource = Enum.GetValues<ElementTheme>().OrderBy(x => x.ToString()).ToArray();
+            //LanguageComboBox.ItemsSource = Enum.GetValues<SyntaxHighlightID>().OrderBy(x => x.ToString()).ToArray();
         }
 
-        private void Textbox_LinkClicked(TextControlBox sender,string url)
+        private void Textbox_LinkClicked(TextControlBox sender, string url)
         {
             Process.Start(new ProcessStartInfo
             {
@@ -71,6 +78,25 @@ namespace TextControlBox_TestApp
         {
             RewriteTabsSpaces(8);
 
+        }
+
+        private void ThemeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (textbox == null)
+                return;
+            var theme = Enum.Parse<ElementTheme>(((ComboBoxItem)((ComboBox)sender).SelectedItem).Content.ToString());
+            SetWindowTheme(this, theme);
+            textbox.DispatcherQueue.TryEnqueue(() =>
+            {
+                textbox.RequestedTheme = theme;
+            });
+        }
+
+        private void LanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (textbox == null) return;
+            var language = Enum.Parse<SyntaxHighlightID>(((ComboBoxItem)((ComboBox)sender).SelectedItem).Content.ToString());
+            textbox.SelectSyntaxHighlightingById(language);
         }
     }
 }

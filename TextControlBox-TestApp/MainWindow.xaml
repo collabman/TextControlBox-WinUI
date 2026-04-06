@@ -1,30 +1,53 @@
-<!-- Copyright (c) Microsoft Corporation and Contributors. -->
-<!-- Licensed under the MIT License. -->
+<!--  Copyright (c) Microsoft Corporation and Contributors.  -->
+<!--  Licensed under the MIT License.  -->
 
 <Window
     x:Class="TextControlBox_TestApp.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:TextControlBox_TestApp"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:local="using:TextControlBox_TestApp"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:textcontrolbox="using:TextControlBoxNS"
     mc:Ignorable="d">
     <Window.SystemBackdrop>
-        <MicaBackdrop Kind="Base"/>
+        <MicaBackdrop Kind="Base" />
     </Window.SystemBackdrop>
 
     <Grid>
-            <StackPanel>
-                <Button Content="Format" Click="Format1_Click">
-                </Button>
-                <Button Content="Format" Click="Format2_Click">
-                </Button>
-                <Button Content="Format" Click="Format3_Click">
-                </Button>
-                <Button Content="Format" Click="Format4_Click">
-                </Button>
-            </StackPanel>
-            <textcontrolbox:TextControlBox Margin="50,0,0,0" x:Name="textbox"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.ColumnSpan="2" HorizontalAlignment="Stretch">
+            <ComboBox
+                x:Name="ThemeComboBox"
+                HorizontalAlignment="Stretch"
+                Header="Select Theme"
+                SelectionChanged="ThemeComboBox_SelectionChanged" >
+                <ComboBoxItem Content="Light" />
+                <ComboBoxItem Content="Dark" />
+                <ComboBoxItem Content="Default" IsSelected="True" />
+            </ComboBox>
+            <ComboBox
+                x:Name="LanguageComboBox"
+                HorizontalAlignment="Stretch"
+                Header="Select Language"
+                SelectionChanged="LanguageComboBox_SelectionChanged" />
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="0">
+            <Button Click="Format1_Click" Content="Format" />
+            <Button Click="Format2_Click" Content="Format" />
+            <Button Click="Format3_Click" Content="Format" />
+            <Button Click="Format4_Click" Content="Format" />
+        </StackPanel>
+        <textcontrolbox:TextControlBox
+            x:Name="textbox"
+            Grid.Row="1"
+            Grid.Column="1" />
     </Grid>
 </Window>
