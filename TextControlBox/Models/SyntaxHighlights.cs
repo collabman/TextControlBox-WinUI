@@ -22,11 +22,20 @@ public class SyntaxHighlights
     /// <param name="bold">true if the pattern should be displayed in bold font; otherwise, false.</param>
     /// <param name="italic">true if the pattern should be displayed in italic font; otherwise, false.</param>
     /// <param name="underlined">true if the pattern should be displayed with an underline; otherwise, false.</param>
-    public SyntaxHighlights(string pattern, string colorLight, string colorDark, bool bold = false, bool italic = false, bool underlined = false)
+    /// <param name="ignoreCase">true if the pattern matching should ignore case; otherwise, false.</param>
+    public SyntaxHighlights(
+        string pattern, 
+        string colorLight, 
+        string colorDark,
+        bool bold = false, 
+        bool italic = false, 
+        bool underlined = false,
+        bool ignoreCase = false)
     {
         this.Pattern = pattern;
         this.ColorDark = colorDark;
         this.ColorLight = colorLight;
+        IgnoreCase = ignoreCase;
 
         if (underlined || italic || bold)
             this.CodeStyle = new CodeFontStyle(underlined, italic, bold);
@@ -69,7 +78,7 @@ public class SyntaxHighlights
     {
         set => ColorLight_Clr = ((Color)ColorConverter.ConvertFromString(value)).ToMediaColor();
     }
-
+    public bool IgnoreCase { get; private set; }
     [JsonIgnore]
     internal Regex PrecompiledRegex { get; private set; }
 
@@ -78,7 +87,7 @@ public class SyntaxHighlights
     {
         if (!string.IsNullOrEmpty(Pattern))
         {
-            PrecompiledRegex = new Regex(Pattern, RegexOptions.Compiled |RegexOptions.Multiline);
+            PrecompiledRegex = new Regex(Pattern, RegexOptions.Compiled | RegexOptions.Multiline | (IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None));
         }
     }
 }

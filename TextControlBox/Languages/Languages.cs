@@ -433,7 +433,11 @@ namespace TextControlBoxNS.Languages
             };
         }
     }
-    internal class Json : SyntaxHighlightLanguage
+
+    /// <summary>
+    /// Syntax highlighting for Json language. Note that this is not a full Json parser, so it may not handle all edge cases correctly, but it should work well for most typical Json files.
+    /// </summary>
+    public class Json : SyntaxHighlightLanguage
     {
         public Json()
         {
@@ -717,7 +721,14 @@ namespace TextControlBoxNS.Languages
             };
         }
     }
-    internal class SQL : SyntaxHighlightLanguage
+
+    /// <summary>
+    /// Provides syntax highlighting definitions for SQL code files.
+    /// </summary>
+    /// <remarks>This class configures keyword, operator, function, number, string, and comment highlighting
+    /// rules specific to SQL syntax. It is intended for use in editors or tools that support extensible syntax
+    /// highlighting via the SyntaxHighlightLanguage base class. The supported file extension is ".sql".</remarks>
+    public class SQL : SyntaxHighlightLanguage
     {
         public SQL()
         {
@@ -728,26 +739,37 @@ namespace TextControlBoxNS.Languages
             this.Highlights = new SyntaxHighlights[]
             {
                 //Keywords
-                new SyntaxHighlights("\\b(ADD|ADD CONSTRAINT|ALL|ALTER|ALTER COLUMN|ALTER TABLE|AND|ANY|AS|ASC|BACKUP DATABASE|BETWEEN|CASE|CHECK|COLUMN|CONSTRAINT|CREATE|CREATE DATABASE|CREATE INDEX|CREATE OR REPLACE VIEW|CREATE TABLE|CREATE PROCEDURE|CREATE UNIQUE INDEX|CREATE VIEW|DATABASE|DEFAULT|DELETE|DESC|DISTINCT|DROP|DROP COLUMN|DROP CONSTRAINT|DROP DATABASE|DROP DEFAULT|DROP INDEX|DROP TABLE|DROP VIEW|EXEC|EXISTS|FOREIGN KEY|FROM|FULL OUTER JOIN|GROUP BY|HAVING|IN|INDEX|INNER JOIN|INSERT INTO|INSERT INTO SELECT|IS NULL|IS NOT NULL|JOIN|LEFT JOIN|LIKE|LIMIT|NOT|NOT NULL|OR|ORDER BY|OUTER JOIN|PRIMARY KEY|PROCEDURE|RIGHT JOIN|ROWNUM|SELECT|SELECT DISTINCT|SELECT INTO|SELCET TOP|SET|TABLE|TOP|TRUNCATE TABLE|UNION|UNION ALL|UNIQUE|UPDATE|USE|VALUES|VIEW|WHERE)\\b","#FF6A00","#FF6A00",true,true),
+                new SyntaxHighlights(
+                    "\\b(VARCHAR|DECLARE|NVARCHAR|ADD|ADD CONSTRAINT|ALL|ALTER|ALTER COLUMN|ALTER TABLE|ANY|AS|ASC|BACKUP DATABASE|BETWEEN|CASE|CHECK|COLUMN|CONSTRAINT|CREATE|CREATE DATABASE|CREATE INDEX|CREATE OR REPLACE VIEW|CREATE TABLE|CREATE PROCEDURE|CREATE UNIQUE INDEX|CREATE VIEW|DATABASE|DEFAULT|DELETE|DESC|DISTINCT|DROP|DROP COLUMN|DROP CONSTRAINT|DROP DATABASE|DROP DEFAULT|DROP INDEX|DROP TABLE|DROP VIEW|EXEC|EXISTS|FOREIGN KEY|FROM|FULL OUTER JOIN|JOIN|INNER|GROUP BY|HAVING|IN|INDEX|INSERT INTO|INSERT INTO SELECT|LIMIT|ORDER BY|PRIMARY KEY|PROCEDURE|RIGHT JOIN|ROWNUM|SELECT|SELECT DISTINCT|SELECT INTO|SELCET TOP|SET|TABLE|TOP|TRUNCATE TABLE|UNION|UNION ALL|UNIQUE|UPDATE|USE|VALUES|VIEW|WHERE|WITH|NOLOCK|WHEN|THEN|ELSE|END|ON)\\b"
+                    ,"#3885D2"
+                    ,"#3885D2"
+                    ,true
+                    ,false
+                    ,false
+                    ,true),
                 
-                //Quotes
-                new SyntaxHighlights("\"[^\\n]*?\"","#42C22B","#42C22B"),
-                new SyntaxHighlights("'[^\\n]*?'","#42C22B","#42C22B"),
-
                 //Numbers
-                new SyntaxHighlights("\\b([+-]?(?=\\.\\d|\\d)(?:\\d+)?(?:\\.?\\d*))(?:[eE]([+-]?\\d+))?\\b", "#FFFFFF","#2B3BFF"),
+                new SyntaxHighlights("\\b([+-]?(?=\\.\\d|\\d)(?:\\d+)?(?:\\.?\\d*))(?:[eE]([+-]?\\d+))?\\b", "#ADCDA8","#ADCDA8"),
+
+                //Operators
+                new SyntaxHighlights("(\\,)|(\\()|(\\))|(=)|(<)|(>)|(!)|\\b(OR|AND|LEFT|RIGHT|CROSS|JOIN|OUTER|LIKE|NOT|IS|NULL)\\b", "#7F7C6E", "#7F7C6E",false, false, false, true),
 
                 //Functions
-                new SyntaxHighlights("\\b(MIN|MAX|COUNT|SUM|AVG)\\b","#11C9DB","#11C9DB",false,true),
+                new SyntaxHighlights("\\b(MIN|MAX|COUNT|SUM|AVG|ROW_NUMBER|IIF|CONCAT|UPPER|ISNULL|CAST|TRIM|LTRIM|RTRIM)\\b","#A970D5","#A970D5", false, false, false, true),
 
                 //Period Seperator
-                new SyntaxHighlights("\\.","#901F9E","#901F9E",true),
+                new SyntaxHighlights("\\.","#7F7C6E","#7F7C6E",true),
+
+                //Quotes
+                new SyntaxHighlights("\"[^\\n]*?\"","#BF3D3D","#BF3D3D"),
+                new SyntaxHighlights("'[^\\n]*?'","#BF3D3D","#BF3D3D"),
 
                  //Single-line Comments
-                new SyntaxHighlights("\\/\\/.*", "#888888", "#646464"),
-            
+                new SyntaxHighlights("--.*", "#57A647", "#57A647"),
+                new SyntaxHighlights("/\\/.*", "#57A647", "#57A647"),
+
                 //Multi-line Comments
-                new SyntaxHighlights("/\\*(?:[^*]|\\*[^/])*\\*/", "#888888", "#646464"),
+                new SyntaxHighlights("/\\*(?:[^*]|\\*[^/])*\\*/", "#57A647", "#57A647"),
             };
         }
     }

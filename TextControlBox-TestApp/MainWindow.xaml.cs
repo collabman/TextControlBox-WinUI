@@ -32,7 +32,7 @@ namespace TextControlBox_TestApp
             });
             foreach(var Language in Enum.GetValues<SyntaxHighlightID>().Cast<SyntaxHighlightID>().OrderBy(x => x.ToString()))
             {
-                LanguageComboBox.Items.Add(new ComboBoxItem { Content = Language.ToString() });
+                LanguageComboBox.Items.Add(new ComboBoxItem { Content = Language.ToString(), IsSelected = Language == SyntaxHighlightID.CSharp });
             }
             //ThemeComboBox.ItemsSource = Enum.GetValues<ElementTheme>().OrderBy(x => x.ToString()).ToArray();
             //LanguageComboBox.ItemsSource = Enum.GetValues<SyntaxHighlightID>().OrderBy(x => x.ToString()).ToArray();

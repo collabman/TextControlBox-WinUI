@@ -3,7 +3,10 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using TextControlBoxNS.Core;
+using TextControlBoxNS.Languages;
 using TextControlBoxNS.Models;
 using Windows.Foundation;
 
@@ -12,8 +15,23 @@ namespace TextControlBoxNS;
 /// <summary>
 /// A custom textbox control with a lot of features
 /// </summary>
-public partial class TextControlBox : UserControl
+public partial class TextControlBox : 
+    UserControl,
+    INotifyPropertyChanged
 {
+    public static readonly DependencyProperty TextProperty = DependencyProperty.Register(nameof(Text), typeof(string), typeof(TextControlBox), new PropertyMetadata(null, OnTextChanged));
+
+    private static void OnTextChanged(
+        DependencyObject d, 
+        DependencyPropertyChangedEventArgs e)
+    {
+        var control = d as TextControlBox;
+        if (control != null)
+        {
+            control.Text = e.NewValue as string;
+        }
+    }
+
     private readonly CoreTextControlBox coreTextBox;
 
     /// <summary>
@@ -37,6 +55,11 @@ public partial class TextControlBox : UserControl
         this.Content = coreTextBox;
 
         this.RequestedTheme = ElementTheme.Default;
+    }
+
+    protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
     private void EventsManager_LineEndingChanged(LineEnding lineEnding)
@@ -765,7 +788,11 @@ public partial class TextControlBox : UserControl
     public string Text
     {
         get => coreTextBox.Text;
-        set => coreTextBox.Text = value;
+        set
+        {
+            coreTextBox.Text = value;
+            OnPropertyChanged();
+        }
     }
     /// <summary>
     /// Gets or sets the requested theme for the textbox.
@@ -1193,6 +1220,7 @@ public partial class TextControlBox : UserControl
     /// Occurs when the line ending style of the document changes.
     /// </summary>
     public event LineEndingChangedEvent LineEndingChanged;
+    public event PropertyChangedEventHandler PropertyChanged;
 
     //static functions
     /// <summary>
